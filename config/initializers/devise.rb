@@ -240,6 +240,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :facebook, ENV["app_id"], ENV["app_secret"]
+  config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"], { }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -253,18 +254,17 @@ Devise.setup do |config|
     Warden::Manager.after_set_user except: :fetch do |record, warden, options|
       if record.respond_to?(:update_tracked_fields!) && warden.authenticated?(options[:scope])
         if record.admin?
-          Rails.logger.info I18n.t "admin.login_log"
+          Rails.logger.info I18n.t("admin.login_log")
         end
       end
     end
 
     Warden::Manager.before_logout do |record, warden, options|
       if record.admin?
-        Rails.logger.info I18n.t "admin.logout_log"
+        Rails.logger.info I18n.t("admin.logout_log")
       end
     end
   end
-
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
   # is mountable, there are some extra configurations to be taken into account.

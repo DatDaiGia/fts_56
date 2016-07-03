@@ -22,6 +22,7 @@ gem "omniauth"
 gem "omniauth-facebook"
 gem "social-share-button"
 gem "whenever", require: false
+gem "omniauth-google-oauth2", "~> 0.2.1"
 
 group :development, :test do
   gem "sqlite3"

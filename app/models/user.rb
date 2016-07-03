@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
     :recoverable, :rememberable, :trackable, :validatable
 
   devise :omniauthable, omniauth_providers: [:facebook]
+  devise :omniauthable, omniauth_providers: [:google_oauth2]
 
   has_many :activities, dependent: :destroy
   has_many :exams, dependent: :destroy
@@ -26,5 +27,17 @@ class User < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def self.from_omniauth access_token
+    data = access_token.info
+    user = User.where(:email => data["email"]).first
+    unless user
+      user = User.create(name: data["name"],
+        email: data["email"],
+        password: Devise.friendly_token[0,20]
+      )
+    end
+    user
   end
 end
